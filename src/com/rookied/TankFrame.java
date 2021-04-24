@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class TankFrame extends Frame {
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
     Tank myTank = new Tank(200, 200, Dir.DOWN, this);
-    Bullet bullet = new Bullet(225, 250, Dir.DOWN);
+    //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
     List<Bullet> bullets = new ArrayList<>();
 
     public TankFrame() {
@@ -66,12 +67,24 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("子弹的数量:"+bullets.size(),10,60);
+        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
         g.setColor(c);
         //如果把tank的属性取出来再画,那就破坏了对象的封装,所以需要类自己实现这个方法
         myTank.paint(g);
-        //多颗子弹
-        bullets.forEach(x->x.paint(g));
+        //多颗子弹 用foreach 在删除子弹时会报错,因为迭代器内部指针会混乱
+        //bullets.forEach(x->x.paint(g));
+        //这样写由于每次bullets.size()会重新计算,所以不会报错
+        /*for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).paint(g);
+        }*/
+
+        for (Iterator<Bullet> it = bullets.listIterator();it.hasNext();){
+            Bullet b = it.next();
+            if(!b.isLive()){
+                it.remove();
+            }
+            b.paint(g);
+        }
     }
 
     class MyKeyListener extends KeyAdapter {

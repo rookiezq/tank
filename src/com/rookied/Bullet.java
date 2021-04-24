@@ -13,14 +13,28 @@ public class Bullet {
     private static final int WIDTH = 5, HEIGHT = 5;
 
     //坐标
-    private int x,y;
+    private int x, y;
     //方向
     private Dir dir;
+    //是否存活
+    private boolean live = true;
 
-    public Bullet(int x, int y, Dir dir) {
+    //获得TankFrame的引用
+    private TankFrame tf;
+
+    public Bullet(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
+    }
+
+    public boolean isLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
     }
 
     public void paint(Graphics g) {
@@ -47,6 +61,9 @@ public class Bullet {
                 break;
             default:
                 break;
+        }
+        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
+            live = false;
         }
     }
 }
