@@ -11,12 +11,17 @@ public class Tank {
     private Dir dir;
     private static final int SPEED = 5;
 
+    //是否静止
     private boolean moving = false;
 
-    public Tank(int x, int y, Dir dir) {
+    //获得TankFrame的引用
+    private TankFrame tf;
+
+    public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
     public Dir getDir() {
@@ -66,5 +71,9 @@ public class Tank {
             default:
                 break;
         }
+    }
+
+    public void fire() {
+        tf.bullet = new Bullet(x + 25, y + 50, dir);
     }
 }
