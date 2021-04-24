@@ -24,11 +24,11 @@ public class Explode {
         this.tf = tf;
     }
 
-    private int step = 1;
+    private int step = 0;
 
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], this.x, this.y, null);
-        if (step >= 16) step = 1;
+        if (step >= 16) tf.explodes.remove(this);
     }
 
 }

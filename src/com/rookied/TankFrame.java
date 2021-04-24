@@ -21,7 +21,8 @@ public class TankFrame extends Frame {
     List<Tank> tanks = new ArrayList<>();
     //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
     List<Bullet> bullets = new ArrayList<>();
-    Explode explode = new Explode(200,100,this);
+    Explode explode = new Explode(200, 100, this);
+    List<Explode> explodes = new ArrayList<>();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -72,8 +73,8 @@ public class TankFrame extends Frame {
         g.setColor(Color.WHITE);
         g.drawString("敌人的数量:" + tanks.size(), 10, 60);
         g.drawString("子弹的数量:" + bullets.size(), 10, 80);
+        g.drawString("爆炸的数量:" + explodes.size(), 10, 100);
         g.setColor(c);
-        explode.paint(g);
         //如果把tank的属性取出来再画,那就破坏了对象的封装,所以需要类自己实现这个方法
         myTank.paint(g);
         //多颗子弹 用foreach 在删除子弹时会报错,因为迭代器内部指针会混乱
@@ -87,10 +88,14 @@ public class TankFrame extends Frame {
             tanks.get(i).paint(g);
         }
 
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
+        }
+
         //碰撞检测 所有子弹和所有坦克互相检测
         for (int i = 0; i < bullets.size(); i++) {
             //敌方坦克可以伤害自己
-            bullets.get(i).collideWith(myTank);
+            //bullets.get(i).collideWith(myTank);
             for (int j = 0; j < tanks.size(); j++) {
                 bullets.get(i).collideWith(tanks.get(j));
             }
