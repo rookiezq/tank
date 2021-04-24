@@ -11,6 +11,9 @@ public class Tank {
     private Dir dir;
     private static final int SPEED = 5;
 
+    public static final int WIDTH = ResourceMgr.tankD.getWidth();
+    public static final int HEIGHT = ResourceMgr.tankD.getHeight();
+
     //是否静止
     private boolean moving = false;
 
@@ -83,6 +86,9 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(x + 25, y + 25, dir, this.tf));
+        //设置子弹的起始位置,从坦克的中心打出
+        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
+        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
+        tf.bullets.add(new Bullet(bX, bY, dir, this.tf));
     }
 }
