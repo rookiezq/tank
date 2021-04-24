@@ -5,6 +5,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangqiang
@@ -15,6 +17,7 @@ public class TankFrame extends Frame {
 
     Tank myTank = new Tank(200, 200, Dir.DOWN, this);
     Bullet bullet = new Bullet(225, 250, Dir.DOWN);
+    List<Bullet> bullets = new ArrayList<>();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -61,9 +64,14 @@ public class TankFrame extends Frame {
      */
     @Override
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("子弹的数量:"+bullets.size(),10,60);
+        g.setColor(c);
         //如果把tank的属性取出来再画,那就破坏了对象的封装,所以需要类自己实现这个方法
         myTank.paint(g);
-        bullet.paint(g);
+        //多颗子弹
+        bullets.forEach(x->x.paint(g));
     }
 
     class MyKeyListener extends KeyAdapter {

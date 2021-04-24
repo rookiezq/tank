@@ -48,9 +48,6 @@ public class Tank {
         move();
     }
 
-    public void attack(Bullet bullet) {
-    }
-
     private void move() {
         if (!moving) {
             return;
@@ -74,6 +71,6 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullet = new Bullet(x + 25, y + 50, dir);
+        tf.bullets.add(new Bullet(x + 25, y + 25, dir));
     }
 }
