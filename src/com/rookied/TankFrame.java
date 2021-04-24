@@ -82,6 +82,7 @@ public class TankFrame extends Frame {
             Bullet b = it.next();
             if(!b.isLive()){
                 it.remove();
+                continue;
             }
             b.paint(g);
         }
