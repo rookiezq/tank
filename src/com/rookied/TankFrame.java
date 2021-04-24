@@ -12,7 +12,8 @@ import java.awt.event.WindowEvent;
  */
 public class TankFrame extends Frame {
     int x = 200, y = 200;
-
+    Dir dir=Dir.DOWN;
+    private static final int SPEED=10;
     public TankFrame() {
         setSize(800, 600);
         //能否改变的大小
@@ -38,8 +39,21 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         //System.out.println(1);
         g.fill3DRect(x, y, 50, 50, true);
-        //x += 10;
-        //y += 10;
+        switch (dir){
+            case UP:
+                y -= SPEED;
+                break;
+            case DOWN:
+                y += SPEED;
+                break;
+            case LEFT:
+                x -= SPEED;
+                break;
+            case RIGHT:
+                x += SPEED;
+                break;
+            default:break;
+        }
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -67,8 +81,10 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
+            setMainTankDir();
             //自动调用paint()
             //repaint();
+
         }
 
         @Override
@@ -90,6 +106,22 @@ public class TankFrame extends Frame {
                     break;
                 default:
                     break;
+            }
+            setMainTankDir();
+        }
+
+        private void setMainTankDir(){
+            if(bL) {
+                dir = Dir.LEFT;
+            }
+            if(bR) {
+                dir = Dir.RIGHT;
+            }
+            if(bU) {
+                dir = Dir.UP;
+            }
+            if(bD) {
+                dir = Dir.DOWN;
             }
         }
     }
