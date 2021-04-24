@@ -39,13 +39,16 @@ public class TankFrame extends Frame {
         System.out.println(1);
         g.fill3DRect(x, y, 50, 50, true);
         x += 10;
-        y += 10;
+        //y += 10;
     }
 
     class MyKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
             System.out.println("按键按下");
+            x+=50;
+            //自动调用paint()
+            //repaint();
         }
 
         @Override

@@ -9,7 +9,11 @@ import java.awt.event.WindowEvent;
  * @date 2021/4/24
  */
 public class Main {
-    public static void main(String[] args) {
-        TankFrame tk = new TankFrame();
+    public static void main(String[] args) throws InterruptedException {
+        TankFrame tf = new TankFrame();
+        while(true){
+            Thread.sleep(50);
+            tf.repaint();
+        }
     }
 }
