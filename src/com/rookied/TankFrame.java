@@ -9,12 +9,15 @@ import java.awt.event.WindowEvent;
  * @date 2021/4/24
  */
 public class TankFrame extends Frame {
-    public TankFrame(){
-        setSize(800,600);
+    int x = 200, y = 200;
+
+    public TankFrame() {
+        setSize(800, 600);
         //能否改变的大小
         //setResizable(false);
         setTitle("Tank");
-        setVisible(true);addWindowListener(new WindowAdapter() {
+        setVisible(true);
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -22,10 +25,15 @@ public class TankFrame extends Frame {
         });
     }
 
-    //窗口创建 改变大小 关闭时自动调用
+    /**
+     * 窗口创建 改变大小时自动调用
+     * 背景先清一遍再重新绘图
+     */
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         System.out.println(1);
-        g.fill3DRect(200,200,50,50,true);
+        g.fill3DRect(x, y, 50, 50, true);
+        x += 10;
+        y += 10;
     }
 }
