@@ -11,9 +11,8 @@ import java.awt.event.WindowEvent;
  * @date 2021/4/24
  */
 public class TankFrame extends Frame {
-    int x = 200, y = 200;
-    Dir dir=Dir.DOWN;
-    private static final int SPEED=10;
+    Tank myTank = new Tank(200, 200, Dir.DOWN);
+
     public TankFrame() {
         setSize(800, 600);
         //能否改变的大小
@@ -37,23 +36,8 @@ public class TankFrame extends Frame {
      */
     @Override
     public void paint(Graphics g) {
-        //System.out.println(1);
-        g.fill3DRect(x, y, 50, 50, true);
-        switch (dir){
-            case UP:
-                y -= SPEED;
-                break;
-            case DOWN:
-                y += SPEED;
-                break;
-            case LEFT:
-                x -= SPEED;
-                break;
-            case RIGHT:
-                x += SPEED;
-                break;
-            default:break;
-        }
+        //如果把tank的属性取出来再画,那就破坏了对象的封装,所以需要类自己实现这个方法
+        myTank.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -110,18 +94,18 @@ public class TankFrame extends Frame {
             setMainTankDir();
         }
 
-        private void setMainTankDir(){
-            if(bL) {
-                dir = Dir.LEFT;
+        private void setMainTankDir() {
+            if (bL) {
+                myTank.setDir(Dir.LEFT);
             }
-            if(bR) {
-                dir = Dir.RIGHT;
+            if (bR) {
+                myTank.setDir(Dir.RIGHT);
             }
-            if(bU) {
-                dir = Dir.UP;
+            if (bU) {
+                myTank.setDir(Dir.UP);
             }
-            if(bD) {
-                dir = Dir.DOWN;
+            if (bD) {
+                myTank.setDir(Dir.DOWN);
             }
         }
     }
