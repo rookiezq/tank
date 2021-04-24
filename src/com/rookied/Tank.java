@@ -36,8 +36,14 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        g.fill3DRect(x, y, 50, 50, true);
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.fillRect(x, y, 50, 50);
+        g.setColor(c);
         move();
+    }
+
+    public void attack(Bullet bullet) {
     }
 
     private void move() {

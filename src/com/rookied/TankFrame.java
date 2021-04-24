@@ -11,11 +11,13 @@ import java.awt.event.WindowEvent;
  * @date 2021/4/24
  */
 public class TankFrame extends Frame {
+    static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
+
     Tank myTank = new Tank(200, 200, Dir.DOWN);
-    Bullet bullet = new Bullet(225, 225, Dir.DOWN);
+    Bullet bullet = new Bullet(225, 250, Dir.DOWN);
 
     public TankFrame() {
-        setSize(800, 600);
+        setSize(GAME_WIDTH, GAME_HEIGHT);
         //能否改变的大小
         //setResizable(false);
         setTitle("Tank");
@@ -29,6 +31,27 @@ public class TankFrame extends Frame {
                 System.exit(0);
             }
         });
+    }
+
+    /**
+     * 处理双缓冲,解决屏幕闪烁问题
+     * 1. 运行在paint之前
+     * 2. 将需要画的内容先在内存中的图片中画出,图片大小和游戏画面一致
+     * 3. 把内存中的图片一次性画到屏幕上(内存的内容复制到显存中)
+     */
+    Image offScreenImage = null;
+    @Override
+    public void update(Graphics g) {
+        if(offScreenImage == null){
+            offScreenImage = this.createImage(GAME_WIDTH,GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
+        gOffScreen.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+        gOffScreen.setColor(c);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage,0,0,null);
     }
 
     /**
@@ -97,9 +120,9 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if(!bL && !bR && !bU && !bD){
+            if (!bL && !bR && !bU && !bD) {
                 myTank.setMoving(false);
-            }else{
+            } else {
                 myTank.setMoving(true);
                 if (bL) {
                     myTank.setDir(Dir.LEFT);
