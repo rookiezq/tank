@@ -74,18 +74,18 @@ public class TankFrame extends Frame {
         //多颗子弹 用foreach 在删除子弹时会报错,因为迭代器内部指针会混乱
         //bullets.forEach(x->x.paint(g));
         //这样写由于每次bullets.size()会重新计算,所以不会报错
-        /*for (int i = 0; i < bullets.size(); i++) {
+        for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
-        }*/
+        }
 
-        for (Iterator<Bullet> it = bullets.listIterator();it.hasNext();){
+        /*for (Iterator<Bullet> it = bullets.listIterator();it.hasNext();){
             Bullet b = it.next();
             if(!b.isLive()){
                 it.remove();
                 continue;
             }
             b.paint(g);
-        }
+        }*/
     }
 
     class MyKeyListener extends KeyAdapter {

@@ -8,9 +8,7 @@ import java.awt.*;
  */
 public class Bullet {
     //速度
-    private static final int SPEED = 5;
-    //长宽
-    private static final int WIDTH = 5, HEIGHT = 5;
+    private static final int SPEED = 10;
 
     //坐标
     private int x, y;
@@ -38,10 +36,26 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGHT);
-        g.setColor(c);
+        if(!live){
+            tf.bullets.remove(this);
+            return;
+        }
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL, x, y, null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.bulletU, x, y, null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR, x, y, null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD, x, y, null);
+                break;
+            default:
+                break;
+        }
         move();
     }
 
