@@ -7,18 +7,17 @@ import java.awt.*;
  * @date 2021/4/24
  */
 public class Bullet {
-    //速度
-    private static final int SPEED = 10;
     //长宽
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
-
+    //速度
+    private static final int SPEED = 10;
     //坐标
     private int x, y;
     //方向
     private Dir dir;
     //是否存活
-    private boolean live = true;
+    private boolean living = true;
 
     //获得TankFrame的引用
     private TankFrame tf;
@@ -30,16 +29,8 @@ public class Bullet {
         this.tf = tf;
     }
 
-    public boolean isLive() {
-        return live;
-    }
-
-    public void setLive(boolean live) {
-        this.live = live;
-    }
-
     public void paint(Graphics g) {
-        if(!live){
+        if (!living) {
             tf.bullets.remove(this);
             return;
         }
@@ -80,7 +71,23 @@ public class Bullet {
                 break;
         }
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
-            live = false;
+            die();
+        }
+    }
+
+    public void die() {
+        this.living = false;
+    }
+
+    /**
+     * 子弹和坦克的碰撞检测
+     */
+    public void collideWith(Tank tank) {
+        Rectangle recT = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
+        Rectangle recB = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        if(recT.intersects(recB)){
+            tank.die();
+            this.die();
         }
     }
 }

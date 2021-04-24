@@ -69,7 +69,8 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+        g.drawString("敌人的数量:" + tanks.size(), 10, 60);
+        g.drawString("子弹的数量:" + bullets.size(), 10, 80);
         g.setColor(c);
         //如果把tank的属性取出来再画,那就破坏了对象的封装,所以需要类自己实现这个方法
         myTank.paint(g);
@@ -82,6 +83,13 @@ public class TankFrame extends Frame {
 
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).paint(g);
+        }
+
+        //碰撞检测 所有子弹和所有坦克互相检测
+        for (int i = 0; i < bullets.size(); i++) {
+            for (int j = 0; j < tanks.size(); j++) {
+                bullets.get(i).collideWith(tanks.get(j));
+            }
         }
         /*for (Iterator<Bullet> it = bullets.listIterator();it.hasNext();){
             Bullet b = it.next();
