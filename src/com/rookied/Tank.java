@@ -1,6 +1,7 @@
 package com.rookied;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * @author zhangqiang
@@ -9,21 +10,36 @@ import java.awt.*;
 public class Tank {
     public static final int WIDTH = ResourceMgr.tankD.getWidth();
     public static final int HEIGHT = ResourceMgr.tankD.getHeight();
-    private static final int SPEED = 5;
+    //移动距离
+    private static final int SPEED = 1;
+    //坦克随机发射子弹
+    private static final Random random = new Random();
+
     private int x, y;
     private Dir dir;
     //是否静止
-    private boolean moving = false;
+    private boolean moving = true;
     private boolean living = true;
 
     //获得TankFrame的引用
     private TankFrame tf;
+    //默认是坏子弹
+    private Group group;
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public int getX() {
@@ -59,7 +75,12 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        if(!living){
+        if (!living) {
+            //TODO:自己被打后需要删除自己,否则子弹会显示黑洞
+            /*if (this == tf.myTank) {
+                g.dispose();
+                return;
+            }*/
             tf.tanks.remove(this);
             return;
         }
@@ -102,13 +123,16 @@ public class Tank {
             default:
                 break;
         }
+        if (Group.BAD == this.group && random.nextInt(10) > 8) {
+            this.fire();
+        }
     }
 
     public void fire() {
         //设置子弹的起始位置,从坦克的中心打出
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bX, bY, dir, this.tf));
+        tf.bullets.add(new Bullet(bX, bY, dir, this.group, this.tf));
     }
 
     public void die() {

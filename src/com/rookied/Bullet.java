@@ -21,12 +21,23 @@ public class Bullet {
 
     //获得TankFrame的引用
     private TankFrame tf;
+    //默认是坏子弹
+    private Group group;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public void paint(Graphics g) {
@@ -83,9 +94,13 @@ public class Bullet {
      * 子弹和坦克的碰撞检测
      */
     public void collideWith(Tank tank) {
-        Rectangle recT = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
-        Rectangle recB = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
-        if(recT.intersects(recB)){
+        if (tank.getGroup() == this.group) {
+            return;
+        }
+        //TODO: 使用一个Rectangle来记录位置
+        Rectangle recT = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+        Rectangle recB = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
+        if (recT.intersects(recB)) {
             tank.die();
             this.die();
         }

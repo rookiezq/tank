@@ -16,7 +16,7 @@ import java.util.List;
 public class TankFrame extends Frame {
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN, this);
+    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
     //敌方坦克
     List<Tank> tanks = new ArrayList<>();
     //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
@@ -87,6 +87,8 @@ public class TankFrame extends Frame {
 
         //碰撞检测 所有子弹和所有坦克互相检测
         for (int i = 0; i < bullets.size(); i++) {
+            //敌方坦克可以伤害自己
+            bullets.get(i).collideWith(myTank);
             for (int j = 0; j < tanks.size(); j++) {
                 bullets.get(i).collideWith(tanks.get(j));
             }
