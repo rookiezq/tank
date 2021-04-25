@@ -29,7 +29,7 @@ public class TankFrame extends Frame {
         //setResizable(false);
         setTitle("Tank");
         setVisible(true);
-
+        myTank.setMoving(false);
         this.addKeyListener(new MyKeyListener());
 
         addWindowListener(new WindowAdapter() {

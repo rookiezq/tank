@@ -127,10 +127,22 @@ public class Tank {
             //随机发射子弹
             if (RANDOM.nextInt(100) > 97) this.fire();
             //随机朝另外三个方向转动
-            if (RANDOM.nextInt(100) > 98) {
+            if (RANDOM.nextInt(100) > 95) {
                 dir = Dir.randomDir();
             }
         }
+        boudsCheck();
+    }
+
+    /**
+     * 边界检测
+     */
+    private void boudsCheck() {
+        if (x <= 0) x = 0;
+        if (x >= TankFrame.GAME_WIDTH - WIDTH) x = TankFrame.GAME_WIDTH - WIDTH;
+        if (y <= 30) y = 30;
+        if (y >= TankFrame.GAME_HEIGHT - HEIGHT) y = TankFrame.GAME_HEIGHT - HEIGHT;
+
     }
 
     public void fire() {
