@@ -25,6 +25,7 @@ public class Tank {
     private TankFrame tf;
     //默认是坏子弹
     private Group group;
+    Rectangle rect = new Rectangle();
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -32,6 +33,11 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public Group getGroup() {
@@ -123,6 +129,7 @@ public class Tank {
             default:
                 break;
         }
+
         if (Group.BAD == this.group) {
             //随机发射子弹
             if (RANDOM.nextInt(100) > 97) this.fire();
@@ -132,6 +139,10 @@ public class Tank {
             }
         }
         boudsCheck();
+
+        //更新rect
+        rect.x = this.x;
+        rect.y = this.y;
     }
 
     /**
