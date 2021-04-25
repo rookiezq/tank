@@ -11,9 +11,9 @@ public class Tank {
     public static final int WIDTH = ResourceMgr.tankD.getWidth();
     public static final int HEIGHT = ResourceMgr.tankD.getHeight();
     //移动距离
-    private static final int SPEED = 1;
+    private static final int SPEED = 3;
     //坦克随机发射子弹
-    private static final Random random = new Random();
+    public static final Random RANDOM = new Random();
 
     private int x, y;
     private Dir dir;
@@ -123,8 +123,13 @@ public class Tank {
             default:
                 break;
         }
-        if (Group.BAD == this.group && random.nextInt(10) > 8) {
-            this.fire();
+        if (Group.BAD == this.group) {
+            //随机发射子弹
+            if (RANDOM.nextInt(100) > 97) this.fire();
+            //随机朝另外三个方向转动
+            if (RANDOM.nextInt(100) > 98) {
+                dir = Dir.randomDir();
+            }
         }
     }
 
