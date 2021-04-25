@@ -14,6 +14,7 @@ import java.util.stream.Stream;
  * @date 2021/4/24
  */
 public class ResourceMgr {
+    private static ResourceMgr Instance;
     public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD;
     public static BufferedImage badTankL, badTankU, badTankR, badTankD;
     public static BufferedImage bulletL, bulletU, bulletR, bulletD;
@@ -21,6 +22,7 @@ public class ResourceMgr {
 
 
     static {
+        Instance = new ResourceMgr();
         try {
             goodTankU = ImageIO.read(Objects.requireNonNull(ResourceMgr.class.getClassLoader().getResourceAsStream("images/GoodTank1.png")));
             goodTankL = ImageUtil.rotateImage(goodTankU, -90);
@@ -42,5 +44,9 @@ public class ResourceMgr {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ResourceMgr getInstance() {
+        return Instance;
     }
 }
