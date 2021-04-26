@@ -40,10 +40,16 @@ public class Tank {
         rect.width = WIDTH;
         rect.height = HEIGHT;
 
+        String name;
         if (this.group == Group.GOOD) {
-            fs = FourFireStrategy.getInstence();
+            name = PropertyMgr.get("goodFS");
         } else {
-            fs = DefaultFireStrategy.getInstence();
+            name = PropertyMgr.get("badFS");
+        }
+        try {
+            fs = (FireStrategy<Tank>) Class.forName(name).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
