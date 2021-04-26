@@ -16,16 +16,17 @@ public class Tank {
     public static final Random RANDOM = new Random();
 
     private int x, y;
-    private Dir dir;
+    Dir dir;
     //是否静止
     private boolean moving = true;
     private boolean living = true;
 
     //获得TankFrame的引用
-    private TankFrame tf;
+    TankFrame tf;
     //默认是坏子弹
-    private Group group;
+    Group group;
     Rectangle rect = new Rectangle();
+    FireStrategy<Tank> fs;
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -38,6 +39,12 @@ public class Tank {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        if (this.group == Group.GOOD) {
+            fs = FourFireStrategy.getInstence();
+        } else {
+            fs = DefaultFireStrategy.getInstence();
+        }
     }
 
     public Group getGroup() {
@@ -157,10 +164,7 @@ public class Tank {
     }
 
     public void fire() {
-        //设置子弹的起始位置,从坦克的中心打出
-        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bX, bY, dir, this.group, this.tf));
+        fs.fire(this);
     }
 
     public void die() {

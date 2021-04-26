@@ -21,14 +21,13 @@ public enum Dir {
     //下
     DOWN;
 
-    private static final List<Dir> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int SIZE = VALUES.size();
+    static final List<Dir> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
     /**
      * 随机返回一个方向
      */
     public static Dir randomDir(){
         //return VALUES.stream().filter(x->x!=dir).findAny().get();
-        return VALUES.get(Tank.RANDOM.nextInt(SIZE));
+        return VALUES.get(Tank.RANDOM.nextInt(VALUES.size()));
     }
 }
