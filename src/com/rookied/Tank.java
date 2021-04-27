@@ -21,19 +21,17 @@ public class Tank {
     private boolean moving = true;
     private boolean living = true;
 
-    //获得TankFrame的引用
-    TankFrame tf;
     //默认是坏子弹
     Group group;
     Rectangle rect = new Rectangle();
     FireStrategy<Tank> fs;
-
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
+    GameModel gm;
+    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
+        this.gm = gm;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -100,7 +98,7 @@ public class Tank {
                 g.dispose();
                 return;
             }*/
-            tf.tanks.remove(this);
+            gm.tanks.remove(this);
             return;
         }
         switch (dir) {

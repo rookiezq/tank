@@ -12,7 +12,7 @@ public class FourFireStrategy implements FireStrategy<Tank> {
         int bY = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
         //朝四个方向打子弹
         for (Dir dir : Dir.VALUES) {
-            new Bullet(bX, bY, dir, tank.group, tank.tf);
+            new Bullet(bX, bY, dir, tank.group, tank.gm);
         }
     }
 
