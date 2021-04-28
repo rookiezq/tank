@@ -72,6 +72,16 @@ public class Bullet extends GameObject{
         move();
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     private void move() {
         switch (dir) {
             case UP:

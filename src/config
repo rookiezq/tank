@@ -1,4 +1,4 @@
 initTankCount=10
 goodFS=com.rookied.FourFireStrategy
 badFS=com.rookied.DefaultFireStrategy
-colliderChain=com.rookied.BulletTankCollider,com.rookied.TankTankCollider
+colliderChain=com.rookied.BulletTankCollider,com.rookied.TankTankCollider,com.rookied.BulletWallColider

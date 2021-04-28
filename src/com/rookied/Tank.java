@@ -87,12 +87,14 @@ public class Tank extends GameObject {
     //上一次的坐标
     private int lx, ly;
 
-    public int getLx() {
-        return lx;
+    @Override
+    public int getWidth() {
+        return WIDTH;
     }
 
-    public int getLy() {
-        return ly;
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     void back() {
