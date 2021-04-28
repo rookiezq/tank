@@ -12,7 +12,6 @@ public class BulletWallColider implements Collider {
             Wall wall = (Wall) o2;
             if(bullet.rect.intersects(wall.rect)){
                 bullet.die();
-                return false;
             }
         } else if (o1 instanceof Wall && o2 instanceof Bullet) {
             return collide(o2, o1);
