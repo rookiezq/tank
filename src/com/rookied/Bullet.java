@@ -6,7 +6,7 @@ import java.awt.*;
  * @author zhangqiang
  * @date 2021/4/24
  */
-public class Bullet {
+public class Bullet extends GameObject{
     //长宽
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
@@ -36,7 +36,7 @@ public class Bullet {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
-        gm.bullets.add(this);
+        gm.add(this);
     }
 
     public Group getGroup() {
@@ -47,9 +47,10 @@ public class Bullet {
         this.group = group;
     }
 
+    @Override
     public void paint(Graphics g) {
         if (!living) {
-            gm.bullets.remove(this);
+            gm.remove(this);
             return;
         }
         switch (dir) {
@@ -101,19 +102,4 @@ public class Bullet {
         this.living = false;
     }
 
-    /**
-     * 子弹和坦克的碰撞检测
-     */
-    public void collideWith(Tank tank) {
-        if (tank.getGroup() == this.group) {
-            return;
-        }
-        if (rect.intersects(tank.rect)) {
-            tank.die();
-            this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            gm.explodes.add(new Explode(eX, eY, this.gm));
-        }
-    }
 }

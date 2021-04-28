@@ -7,7 +7,7 @@ import java.util.Random;
  * @author zhangqiang
  * @date 2021/4/24
  */
-public class Tank {
+public class Tank extends GameObject {
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();
     //移动距离
@@ -26,6 +26,7 @@ public class Tank {
     Rectangle rect = new Rectangle();
     FireStrategy<Tank> fs;
     GameModel gm;
+
     public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
@@ -55,10 +56,6 @@ public class Tank {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public int getX() {
         return x;
     }
@@ -83,22 +80,37 @@ public class Tank {
         this.dir = dir;
     }
 
-    public boolean isMoving() {
-        return moving;
-    }
-
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
+    //上一次的坐标
+    private int lx, ly;
+
+    public int getLx() {
+        return lx;
+    }
+
+    public int getLy() {
+        return ly;
+    }
+
+    void back() {
+        this.x = this.lx;
+        this.y = this.ly;
+    }
+
+    @Override
     public void paint(Graphics g) {
+        this.lx = this.x;
+        this.ly = this.y;
         if (!living) {
             //TODO:自己被打后需要删除自己,否则子弹会显示黑洞
             /*if (this == tf.myTank) {
                 g.dispose();
                 return;
             }*/
-            gm.tanks.remove(this);
+            gm.remove(this);
             return;
         }
         switch (dir) {

@@ -8,7 +8,7 @@ import java.awt.*;
  * @author zhangqiang
  * @date 2021/4/24
  */
-public class Explode {
+public class Explode extends GameObject{
     //长宽
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
@@ -24,9 +24,10 @@ public class Explode {
 
     private int step = 0;
 
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], this.x, this.y, null);
-        if (step >= 16) gm.explodes.remove(this);
+        if (step >= 16) gm.remove(this);
     }
 
 }
