@@ -25,8 +25,8 @@ public class TankTankCollider implements Collider {
                 int e1Y = tank1.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
                 int e2X = tank2.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
                 int e2Y = tank2.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-                tank1.gm.add(new Explode(e1X, e1Y, tank1.gm));
-                tank2.gm.add(new Explode(e2X, e2Y, tank2.gm));
+                new Explode(e1X, e1Y);
+                new Explode(e2X, e2Y);
                 return false;
             }
         }

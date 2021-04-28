@@ -25,14 +25,13 @@ public class Tank extends GameObject {
     Group group;
     Rectangle rect = new Rectangle();
     FireStrategy<Tank> fs;
-    GameModel gm;
 
-    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gm = gm;
+        GameModel.getInstance().add(this);
 
         rect.x = this.x;
         rect.y = this.y;
@@ -112,7 +111,7 @@ public class Tank extends GameObject {
                 g.dispose();
                 return;
             }*/
-            gm.remove(this);
+            GameModel.getInstance().remove(this);
             return;
         }
         switch (dir) {

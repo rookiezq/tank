@@ -10,7 +10,7 @@ public class DefaultFireStrategy implements FireStrategy<Tank> {
         //设置子弹的起始位置,从坦克的中心打出
         int bX = tank.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        new Bullet(bX, bY, tank.dir, tank.group, tank.gm);
+        new Bullet(bX, bY, tank.dir, tank.group);
     }
 
     private static class DefaultInstance{

@@ -9,7 +9,25 @@ import java.util.List;
  * @date 2021/4/27
  */
 public class GameModel {
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    private static final GameModel INSTANCE = new GameModel();
+    static {
+        INSTANCE.init();
+    }
+    Tank myTank;
+    private void init() {
+        myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
+        int count = Integer.parseInt(PropertyMgr.get("initTankCount"));
+        for (int i = 0; i < count; i++) {
+            new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD);
+        }
+
+        // 初始化墙
+        add(new Wall(150, 150, 200, 50));
+        add(new Wall(550, 150, 200, 50));
+        add(new Wall(300, 300, 50, 200));
+        add(new Wall(550, 300, 50, 200));
+    }
+
     //敌方坦克
 /*    List<Tank> tanks = new ArrayList<>();
     //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
@@ -18,17 +36,12 @@ public class GameModel {
     private List<GameObject> objects = new ArrayList<>();
     Collider collider = new ColliderChain();
 
-    public GameModel() {
-        int count = Integer.parseInt(PropertyMgr.get("initTankCount"));
-        for (int i = 0; i < count; i++) {
-            add(new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD, this));
-        }
+    public static GameModel getInstance() {
+        return INSTANCE;
+    }
 
-        // 初始化墙
-        add(new Wall(150, 150, 200, 50));
-        add(new Wall(550, 150, 200, 50));
-        add(new Wall(300, 300, 50, 200));
-        add(new Wall(550, 300, 50, 200));
+    public GameModel() {
+
     }
 
     public void add(GameObject go) {
