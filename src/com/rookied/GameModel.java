@@ -80,4 +80,8 @@ public class GameModel {
     public Tank getMainTank() {
         return myTank;
     }
+
+    public void handFireKey(){
+        myTank.handFireKey();
+    }
 }

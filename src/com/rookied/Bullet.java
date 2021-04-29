@@ -12,8 +12,6 @@ public class Bullet extends GameObject{
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
     //速度
     private static final int SPEED = 10;
-    //坐标
-    private int x, y;
     //方向
     private Dir dir;
     //是否存活

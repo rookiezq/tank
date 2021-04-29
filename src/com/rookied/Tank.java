@@ -1,6 +1,12 @@
 package com.rookied;
 
+import com.rookied.observer.FireListener;
+import com.rookied.observer.Listener;
+import com.rookied.observer.TankEvent;
+
 import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,7 +21,6 @@ public class Tank extends GameObject {
     //坦克随机发射子弹
     public static final Random RANDOM = new Random();
 
-    private int x, y;
     Dir dir;
     //是否静止
     private boolean moving = true;
@@ -187,4 +192,14 @@ public class Tank extends GameObject {
     public void die() {
         this.living = false;
     }
+
+
+    List<Listener> list = Collections.singletonList(new FireListener());
+    public void handFireKey() {
+        TankEvent tk = new TankEvent(this);
+        for (Listener listener : list) {
+            listener.action(tk);
+        }
+    }
 }
+
