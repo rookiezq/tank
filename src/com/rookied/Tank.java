@@ -195,6 +195,7 @@ public class Tank extends GameObject {
 
 
     List<Listener> list = Collections.singletonList(new FireListener());
+
     public void handFireKey() {
         TankEvent tk = new TankEvent(this);
         for (Listener listener : list) {

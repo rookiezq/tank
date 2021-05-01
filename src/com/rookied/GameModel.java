@@ -1,6 +1,7 @@
 package com.rookied;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,16 @@ import java.util.List;
  * @author zhangqiang
  * @date 2021/4/27
  */
-public class GameModel {
-    private static final GameModel INSTANCE = new GameModel();
+public class GameModel implements Serializable {
+    private static final long serialVersionUID = -766098840111752798L;
+    private static  GameModel INSTANCE = new GameModel();
+
     static {
         INSTANCE.init();
     }
+
     Tank myTank;
+
     private void init() {
         myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
         int count = Integer.parseInt(PropertyMgr.get("initTankCount"));
@@ -81,7 +86,25 @@ public class GameModel {
         return myTank;
     }
 
-    public void handFireKey(){
+    public void handFireKey() {
         myTank.handFireKey();
+    }
+
+    public void save() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./tank.data"))
+        ) {
+            oos.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        try (ObjectInputStream oos = new ObjectInputStream(new FileInputStream("./tank.data"))
+        ) {
+            INSTANCE = (GameModel) oos.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }
