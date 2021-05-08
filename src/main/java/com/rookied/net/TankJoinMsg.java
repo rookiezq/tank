@@ -79,4 +79,17 @@ public class TankJoinMsg {
         return bytes;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(this.getClass().getName());
+        sb.append('[');
+        sb.append("x=").append(x);
+        sb.append("| y=").append(y);
+        sb.append("| dir=").append(dir);
+        sb.append("| moving=").append(moving);
+        sb.append("| group=").append(group);
+        sb.append("| id=").append(id);
+        sb.append(']');
+        return sb.toString();
+    }
 }

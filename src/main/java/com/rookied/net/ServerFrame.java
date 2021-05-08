@@ -35,7 +35,7 @@ public class ServerFrame extends Frame {
 
     public static void main(String[] args) {
         ServerFrame.INSTANCE.setVisible(true);
-        INSTANCE.server.start();
+        ServerFrame.INSTANCE.server.start();
     }
 
     public void updateServerMsg(String msg) {

@@ -7,7 +7,6 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 /**
@@ -31,6 +30,7 @@ public class Server {
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
                                     .addLast(new TankJoinMsgDecoder())
+                                    .addLast(new TankJoinMsgEncoder())
                                     .addLast(new Handler());
                         }
                     });
@@ -60,14 +60,17 @@ class Handler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        System.out.println("channelRead");
+        TankJoinMsg tm = (TankJoinMsg) msg;
+        System.out.println(tm);
+        Server.clients.writeAndFlush(msg);
+        /*System.out.println("channelRead");
         try {
             TankJoinMsg tm = (TankJoinMsg) msg;
 
             System.out.println(tm);
         } finally {
             ReferenceCountUtil.release(msg);
-        }
+        }*/
         /*ByteBuf buf = (ByteBuf) msg;
         byte[] bytes = new byte[buf.readableBytes()];
         buf.getBytes(buf.readerIndex(), bytes);

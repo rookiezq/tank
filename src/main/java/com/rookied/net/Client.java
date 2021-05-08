@@ -1,5 +1,6 @@
 package com.rookied.net;
 
+import com.rookied.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -7,7 +8,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 
 /**
  * @author zhangqiang
@@ -32,6 +32,7 @@ public class Client {
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
                                     .addLast(new TankJoinMsgEncoder())
+                                    .addLast(new TankJoinMsgDecoder())
                                     .addLast(new ClientHandler());
                         }
                     })
@@ -71,30 +72,19 @@ public class Client {
     }
 }
 
-class ClientHandler extends ChannelInboundHandlerAdapter {
+class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("channel is activated");
-        //ctx.channel().writeAndFlush(new TankJoinMsg());
+        //System.out.println("channel is activated");
+        ctx.channel().writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ByteBuf buf = null;
-        try {
-
-            buf = (ByteBuf) msg;
-            byte[] bytes = new byte[buf.readableBytes()];
-            buf.getBytes(buf.readerIndex(), bytes);
-            String msgAccepted = new String(bytes);
-            //System.out.println(Thread.currentThread().getName() + "------>" + msgAccepted);
-            //ClientFrame.INSTENCE.updateTxt(msgAccepted);
-        } finally {
-            if (buf != null) {
-                ReferenceCountUtil.release(buf);
-            }
-        }
+    public void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) {
+        System.out.println(msg);
+        //System.out.println(Thread.currentThread().getName() + "------>" + msgAccepted);
+        //ClientFrame.INSTENCE.updateTxt(msgAccepted);
 
     }
 

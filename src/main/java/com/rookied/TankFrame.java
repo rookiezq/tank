@@ -7,27 +7,32 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author zhangqiang
  * @date 2021/4/24
  */
 public class TankFrame extends Frame {
-    static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    public static final TankFrame INSTANCE = new TankFrame();
+    static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
+    Random r = new Random();
+
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
+
     //敌方坦克
     List<Tank> tanks = new ArrayList<>();
     //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
     List<Bullet> bullets = new ArrayList<>();
     List<Explode> explodes = new ArrayList<>();
 
-    public TankFrame() {
+    private TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         //能否改变的大小
         //setResizable(false);
         setTitle("Tank");
-        setVisible(true);
+        setAlwaysOnTop(true);
         myTank.setMoving(false);
         this.addKeyListener(new MyKeyListener());
 
@@ -106,6 +111,10 @@ public class TankFrame extends Frame {
             }
             b.paint(g);
         }*/
+    }
+
+    public Tank getMyTank() {
+        return this.myTank;
     }
 
     class MyKeyListener extends KeyAdapter {
