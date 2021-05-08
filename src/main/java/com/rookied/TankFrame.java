@@ -1,6 +1,7 @@
 package com.rookied;
 
 import com.rookied.net.Client;
+import com.rookied.net.TankDirChangedMsg;
 import com.rookied.net.TankStartMovingMsg;
 import com.rookied.net.TankStopMsg;
 
@@ -183,6 +184,9 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
+            //save the old dir
+            Dir dir = myTank.getDir();
+
             if (!bL && !bR && !bU && !bD) {
                 myTank.setMoving(false);
                 Client.INSTANCE.send(new TankStopMsg(myTank));
@@ -204,6 +208,9 @@ public class TankFrame extends Frame {
                     Client.INSTANCE.send(new TankStartMovingMsg(myTank));
                 }
                 myTank.setMoving(true);
+                if(dir != myTank.getDir()){
+                    Client.INSTANCE.send(new TankDirChangedMsg(myTank));
+                }
             }
         }
     }
