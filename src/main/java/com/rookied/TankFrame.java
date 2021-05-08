@@ -2,6 +2,7 @@ package com.rookied;
 
 import com.rookied.net.Client;
 import com.rookied.net.TankStartMovingMsg;
+import com.rookied.net.TankStopMsg;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -18,7 +19,7 @@ import java.util.*;
 public class TankFrame extends Frame {
 
     public static final TankFrame INSTANCE = new TankFrame();
-    static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
+    static final int GAME_WIDTH = 600, GAME_HEIGHT = 400;
     Random r = new Random();
 
     Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
@@ -184,6 +185,7 @@ public class TankFrame extends Frame {
         private void setMainTankDir() {
             if (!bL && !bR && !bU && !bD) {
                 myTank.setMoving(false);
+                Client.INSTANCE.send(new TankStopMsg(myTank));
             } else {
 
                 if (bL) {
@@ -199,7 +201,7 @@ public class TankFrame extends Frame {
                     myTank.setDir(Dir.DOWN);
                 }
                 if (!myTank.isMoving()) {
-                    Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
+                    Client.INSTANCE.send(new TankStartMovingMsg(myTank));
                 }
                 myTank.setMoving(true);
             }

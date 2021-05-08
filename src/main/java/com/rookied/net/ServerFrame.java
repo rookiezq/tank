@@ -18,7 +18,7 @@ public class ServerFrame extends Frame {
 
     public ServerFrame() {
         this.setSize(600, 300);
-        this.setLocation(300, 30);
+        this.setLocation(1100, 0);
         this.setAlwaysOnTop(true);
         this.add(btnStart, BorderLayout.NORTH);
         Panel p = new Panel(new GridLayout(1, 2));

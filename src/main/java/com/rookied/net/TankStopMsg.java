@@ -1,6 +1,5 @@
 package com.rookied.net;
 
-import com.rookied.Dir;
 import com.rookied.Tank;
 import com.rookied.TankFrame;
 
@@ -14,15 +13,13 @@ import java.util.UUID;
 public class TankStopMsg extends Msg {
     public UUID id;
     public int x, y;
-    public Dir dir;
 
     public TankStopMsg() {
     }
 
-    public TankStopMsg(int x, int y, Dir dir, UUID id) {
+    public TankStopMsg(int x, int y,UUID id) {
         this.x = x;
         this.y = y;
-        this.dir = dir;
         this.id = id;
     }
 
@@ -30,7 +27,6 @@ public class TankStopMsg extends Msg {
         this.id = tank.getId();
         this.x = tank.getX();
         this.y = tank.getY();
-        this.dir = tank.getDir();
     }
 
     @Override
@@ -39,8 +35,7 @@ public class TankStopMsg extends Msg {
             return;
         Tank tank = TankFrame.INSTANCE.findByUUID(this.id);
         if (tank != null) {
-            tank.setMoving(true);
-            tank.setDir(this.dir);
+            tank.setMoving(false);
             tank.setX(this.x);
             tank.setY(this.y);
         }
@@ -58,7 +53,6 @@ public class TankStopMsg extends Msg {
 
             dos.writeInt(x);
             dos.writeInt(y);
-            dos.writeInt(dir.ordinal());
             dos.writeLong(id.getMostSignificantBits());
             dos.writeLong(id.getLeastSignificantBits());
 
@@ -91,7 +85,6 @@ public class TankStopMsg extends Msg {
 
             this.x = dis.readInt();
             this.y = dis.readInt();
-            this.dir = Dir.VALUES.get(dis.readInt());
             this.id = new UUID(dis.readLong(), dis.readLong());
 
         } catch (IOException e) {
@@ -112,17 +105,16 @@ public class TankStopMsg extends Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TankStartMoving;
+        return MsgType.TankStop;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("TankStartMovingMsg");
+        StringBuilder sb = new StringBuilder("TankStopMsg");
         sb.append("[");
         sb.append("id=").append(id);
         sb.append("| x=").append(x);
         sb.append("| y=").append(y);
-        sb.append("| dir=").append(dir);
         sb.append(']');
         return sb.toString();
     }
