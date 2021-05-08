@@ -30,7 +30,7 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
-                                    .addLast(new TankMsgDecoder())
+                                    .addLast(new TankJoinMsgDecoder())
                                     .addLast(new Handler());
                         }
                     });
@@ -62,7 +62,7 @@ class Handler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("channelRead");
         try {
-            TankMsg tm = (TankMsg) msg;
+            TankJoinMsg tm = (TankJoinMsg) msg;
 
             System.out.println(tm);
         } finally {

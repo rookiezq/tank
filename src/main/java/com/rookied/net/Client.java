@@ -31,7 +31,7 @@ public class Client {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
-                                    .addLast(new TankMsgEncoder())
+                                    .addLast(new TankJoinMsgEncoder())
                                     .addLast(new ClientHandler());
                         }
                     })
@@ -76,7 +76,7 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         System.out.println("channel is activated");
-        ctx.channel().writeAndFlush(new TankMsg(5, 8));
+        //ctx.channel().writeAndFlush(new TankJoinMsg());
     }
 
     @Override

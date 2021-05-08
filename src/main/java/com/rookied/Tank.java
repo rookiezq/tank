@@ -2,6 +2,7 @@ package com.rookied;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author zhangqiang
@@ -10,22 +11,21 @@ import java.util.Random;
 public class Tank {
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();
-    //移动距离
-    private static final int SPEED = 3;
     //坦克随机发射子弹
     public static final Random RANDOM = new Random();
-
+    //移动距离
+    private static final int SPEED = 3;
+    Rectangle rect = new Rectangle();
+    UUID id = UUID.randomUUID();
     private int x, y;
     private Dir dir;
     //是否静止
     private boolean moving = true;
     private boolean living = true;
-
     //获得TankFrame的引用
     private TankFrame tf;
     //默认是坏子弹
     private Group group;
-    Rectangle rect = new Rectangle();
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -38,6 +38,15 @@ public class Tank {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Tank setId(UUID id) {
+        this.id = id;
+        return this;
     }
 
     public Group getGroup() {

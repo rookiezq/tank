@@ -3,7 +3,6 @@ package com.rookied;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 坦克和子弹的方向
@@ -21,8 +20,8 @@ public enum Dir {
     //下
     DOWN;
 
-    private static final List<Dir> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int SIZE = VALUES.size();
+    public static final List<Dir> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    public static final int SIZE = VALUES.size();
 
     /**
      * 随机返回一个方向
