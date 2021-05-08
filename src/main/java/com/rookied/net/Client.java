@@ -1,5 +1,6 @@
 package com.rookied.net;
 
+import com.rookied.Tank;
 import com.rookied.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -14,10 +15,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @date 2021/5/5
  */
 public class Client {
+    public static final Client INSTANCE = new Client();
     int port = 10001;
     private Channel channel;
 
-    public Client() {
+    private Client() {
     }
 
     public void connect() {
@@ -82,10 +84,11 @@ class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) {
-        System.out.println(msg);
-        //System.out.println(Thread.currentThread().getName() + "------>" + msgAccepted);
-        //ClientFrame.INSTENCE.updateTxt(msgAccepted);
-
+        if (msg.id.equals(TankFrame.INSTANCE.getMyTank().getId()) || TankFrame.INSTANCE.findByUUID(msg.id) != null)
+            return;
+        TankFrame.INSTANCE.addTank(new Tank(msg));
+        //让新坦克能看到老坦克
+        ctx.channel().writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
     }
 
     @Override

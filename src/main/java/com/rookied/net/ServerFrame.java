@@ -17,7 +17,7 @@ public class ServerFrame extends Frame {
     Server server = new Server();
 
     public ServerFrame() {
-        this.setSize(1000, 600);
+        this.setSize(600, 300);
         this.setLocation(300, 30);
         this.setAlwaysOnTop(true);
         this.add(btnStart, BorderLayout.NORTH);

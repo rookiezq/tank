@@ -52,16 +52,17 @@ public class Server {
     }
 }
 
-class Handler extends ChannelInboundHandlerAdapter {
+class Handler extends SimpleChannelInboundHandler<TankJoinMsg> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         Server.clients.add(ctx.channel());
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        TankJoinMsg tm = (TankJoinMsg) msg;
-        System.out.println(tm);
+    public void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) {
+/*        if(TankFrame.INSTANCE.findByUUID(msg.id) == null){
+            ServerFrame.INSTANCE.updateServerMsg("tank: " + msg.id.toString().substring(0, 8) + " 加入");
+        }*/
         Server.clients.writeAndFlush(msg);
         /*System.out.println("channelRead");
         try {

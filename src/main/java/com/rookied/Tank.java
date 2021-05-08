@@ -1,5 +1,7 @@
 package com.rookied;
 
+import com.rookied.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
 import java.util.UUID;
@@ -39,39 +41,34 @@ public class Tank {
         rect.width = WIDTH;
         rect.height = HEIGHT;
     }
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
+    }
 
     public UUID getId() {
         return id;
     }
 
-    public Tank setId(UUID id) {
-        this.id = id;
-        return this;
-    }
 
     public Group getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
 
     public Dir getDir() {
         return dir;
@@ -96,7 +93,7 @@ public class Tank {
                 g.dispose();
                 return;
             }*/
-            tf.tanks.remove(this);
+            tf.tanks.remove(this.id);
             return;
         }
         //uuid on head
