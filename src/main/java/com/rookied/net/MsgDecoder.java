@@ -29,15 +29,11 @@ public class MsgDecoder extends ByteToMessageDecoder {
         byte[] bytes = new byte[length];
         in.readBytes(bytes);
         Msg msg = null;
-        switch (msgType) {
-            case TankJoin:
-                msg = new TankJoinMsg();
-                break;
-            case TankStartMoving:
-                msg = new TankStartMovingMsg();
-                break;
-            default:
-                break;
+        try {
+            //反射
+            msg = (Msg) Class.forName(Msg.class.getPackage().getName() + "." + msgType.toString() + "Msg").newInstance();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
         }
         assert msg != null;
         msg.parse(bytes);
