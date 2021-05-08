@@ -24,7 +24,7 @@ public class Main {
                 tf.repaint();
             }
         }).start();
-        Client c = Client.INSTANCE;
-        c.connect();
+
+        Client.INSTANCE.connect();
     }
 }

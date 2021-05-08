@@ -1,5 +1,6 @@
 import com.rookied.Dir;
 import com.rookied.Group;
+import com.rookied.net.MsgType;
 import com.rookied.net.TankJoinMsg;
 import com.rookied.net.TankJoinMsgDecoder;
 import com.rookied.net.TankJoinMsgEncoder;
@@ -19,16 +20,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class TankJoinMsgCodecTest {
     @Test
-    void testEncoder(){
+    void testEncoder() {
         EmbeddedChannel ch = new EmbeddedChannel();
 
         UUID id = UUID.randomUUID();
-        TankJoinMsg msg = new TankJoinMsg(5,10, Dir.DOWN,true, Group.BAD,id);
+        TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
         ch.pipeline().addLast(new TankJoinMsgEncoder());
         ch.writeOutbound(msg);
 
         ByteBuf buf = ch.readOutbound();
-
+        MsgType msgType = MsgType.values()[buf.readInt()];
+        assertEquals(MsgType.TankJoin, msgType);
+        int length = buf.readInt();
+        assertEquals(33, length);
         int x = buf.readInt();
         int y = buf.readInt();
         int dirOrdinal = buf.readInt();
@@ -47,13 +51,17 @@ public class TankJoinMsgCodecTest {
     }
 
     @Test
-    void testDecoder(){
+    void testDecoder() {
         EmbeddedChannel ch = new EmbeddedChannel();
 
         ch.pipeline().addLast(new TankJoinMsgDecoder());
         UUID id = UUID.randomUUID();
         TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
-        ByteBuf buf = Unpooled.copiedBuffer(msg.toBytes());
+        ByteBuf buf = Unpooled.buffer();
+        buf.writeInt(MsgType.TankJoin.ordinal());
+        byte[] bytes = msg.toBytes();
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
         ch.writeInbound(buf.duplicate());
 
         TankJoinMsg msgR = ch.readInbound();

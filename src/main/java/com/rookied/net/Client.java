@@ -1,10 +1,7 @@
 package com.rookied.net;
 
-import com.rookied.Tank;
 import com.rookied.TankFrame;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -57,13 +54,12 @@ public class Client {
         }
     }
 
-    public void send(String msg) {
-        ByteBuf byteBuf = Unpooled.copiedBuffer(msg.getBytes());
-        channel.writeAndFlush(byteBuf);
+    public void send(Msg msg) {
+        channel.writeAndFlush(msg);
     }
 
     public void closeConnect() {
-        this.send("_bye_");
+        //this.send("_bye_");
         //channel.close();
     }
 
@@ -74,7 +70,7 @@ public class Client {
     }
 }
 
-class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+class ClientHandler extends SimpleChannelInboundHandler<Msg> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
@@ -83,12 +79,8 @@ class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) {
-        if (msg.id.equals(TankFrame.INSTANCE.getMyTank().getId()) || TankFrame.INSTANCE.findByUUID(msg.id) != null)
-            return;
-        TankFrame.INSTANCE.addTank(new Tank(msg));
-        //让新坦克能看到老坦克
-        ctx.channel().writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
+    public void channelRead0(ChannelHandlerContext ctx, Msg msg) {
+        msg.handle();
     }
 
     @Override

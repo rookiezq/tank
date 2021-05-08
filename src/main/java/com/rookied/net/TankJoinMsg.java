@@ -3,17 +3,16 @@ package com.rookied.net;
 import com.rookied.Dir;
 import com.rookied.Group;
 import com.rookied.Tank;
+import com.rookied.TankFrame;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 /**
  * @author zhangqiang
  * @date 2021/5/7
  */
-public class TankJoinMsg {
+public class TankJoinMsg extends Msg {
     //所有属性加起来33字节
     public int x, y;
     public Dir dir;
@@ -43,6 +42,16 @@ public class TankJoinMsg {
         this.id = tank.getId();
     }
 
+    @Override
+    public void handle() {
+        if (this.id.equals(TankFrame.INSTANCE.getMyTank().getId()) || TankFrame.INSTANCE.findByUUID(this.id) != null)
+            return;
+        TankFrame.INSTANCE.addTank(new Tank(this));
+        //让新坦克能看到老坦克
+        Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
+    }
+
+    @Override
     public byte[] toBytes() {
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -77,6 +86,42 @@ public class TankJoinMsg {
             }
         }
         return bytes;
+    }
+
+    @Override
+    public void parse(byte[] bytes) {
+        ByteArrayInputStream bais = null;
+        DataInputStream dis = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            dis = new DataInputStream(bais);
+
+            this.x=dis.readInt();
+            this.y=dis.readInt();
+            this.dir=Dir.VALUES.get(dis.readInt());
+            this.moving=dis.readBoolean();
+            this.group=Group.values()[dis.readInt()];
+            this.id=new UUID(dis.readLong(),dis.readLong());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (dis != null) {
+                    dis.close();
+                }
+                if (bais != null) {
+                    bais.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public MsgType getMsgType() {
+        return MsgType.TankJoin;
     }
 
     @Override

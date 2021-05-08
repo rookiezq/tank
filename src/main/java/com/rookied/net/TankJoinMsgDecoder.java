@@ -1,13 +1,10 @@
 package com.rookied.net;
 
-import com.rookied.Dir;
-import com.rookied.Group;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author zhangqiang
@@ -16,17 +13,31 @@ import java.util.UUID;
 public class TankJoinMsgDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
-        if(in.readableBytes()<33) { //当前版本TcpJoinMsg属性字节加起来为33字节
+        //拆包和粘包
+        if (in.readableBytes() < 8) { //消息类型和长度一共8字节
             return;
         }
-        TankJoinMsg msg = new TankJoinMsg();
-        msg.x = in.readInt();
-        msg.y = in.readInt();
-        msg.dir = Dir.VALUES.get(in.readInt());
-        msg.moving = in.readBoolean();
-        msg.group = Group.values()[in.readInt()];
-        msg.id = new UUID(in.readLong(),in.readLong());
+        in.markReaderIndex();//标记起始位置
 
-        out.add(msg);
+        MsgType msgType = MsgType.values()[in.readInt()];
+        int length = in.readInt();
+        if (in.readableBytes() < length) {
+            in.resetReaderIndex();//回到上面标记起始位置
+            return;
+        }
+        //将消息体拷贝一份
+        byte[] bytes = new byte[length];
+        in.readBytes(bytes);
+        switch (msgType) {
+            case TankJoin:
+                TankJoinMsg msg = new TankJoinMsg();
+                msg.parse(bytes);
+                out.add(msg);
+                break;
+            case TankDie:
+            default:
+                break;
+        }
+
     }
 }
