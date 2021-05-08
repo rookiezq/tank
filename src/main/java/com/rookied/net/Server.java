@@ -29,8 +29,8 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
-                                    .addLast(new TankJoinMsgDecoder())
-                                    .addLast(new TankJoinMsgEncoder())
+                                    .addLast(new MsgDecoder())
+                                    .addLast(new MsgEncoder())
                                     .addLast(new Handler());
                         }
                     });
@@ -52,17 +52,18 @@ public class Server {
     }
 }
 
-class Handler extends SimpleChannelInboundHandler<TankJoinMsg> {
+class Handler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         Server.clients.add(ctx.channel());
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
 /*        if(TankFrame.INSTANCE.findByUUID(msg.id) == null){
             ServerFrame.INSTANCE.updateServerMsg("tank: " + msg.id.toString().substring(0, 8) + " 加入");
         }*/
+        ServerFrame.INSTANCE.updateClientMsg(msg.toString());
         Server.clients.writeAndFlush(msg);
         /*System.out.println("channelRead");
         try {

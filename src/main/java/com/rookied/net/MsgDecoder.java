@@ -10,7 +10,7 @@ import java.util.List;
  * @author zhangqiang
  * @date 2021/5/7
  */
-public class TankJoinMsgDecoder extends ByteToMessageDecoder {
+public class MsgDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         //拆包和粘包
@@ -28,16 +28,19 @@ public class TankJoinMsgDecoder extends ByteToMessageDecoder {
         //将消息体拷贝一份
         byte[] bytes = new byte[length];
         in.readBytes(bytes);
+        Msg msg = null;
         switch (msgType) {
             case TankJoin:
-                TankJoinMsg msg = new TankJoinMsg();
-                msg.parse(bytes);
-                out.add(msg);
+                msg = new TankJoinMsg();
                 break;
-            case TankDie:
+            case TankStartMoving:
+                msg = new TankStartMovingMsg();
+                break;
             default:
                 break;
         }
-
+        assert msg != null;
+        msg.parse(bytes);
+        out.add(msg);
     }
 }

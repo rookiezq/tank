@@ -30,8 +30,8 @@ public class Client {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline()
-                                    .addLast(new TankJoinMsgEncoder())
-                                    .addLast(new TankJoinMsgDecoder())
+                                    .addLast(new MsgEncoder())
+                                    .addLast(new MsgDecoder())
                                     .addLast(new ClientHandler());
                         }
                     })

@@ -1,5 +1,8 @@
 package com.rookied;
 
+import com.rookied.net.Client;
+import com.rookied.net.TankStartMovingMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -182,7 +185,7 @@ public class TankFrame extends Frame {
             if (!bL && !bR && !bU && !bD) {
                 myTank.setMoving(false);
             } else {
-                myTank.setMoving(true);
+
                 if (bL) {
                     myTank.setDir(Dir.LEFT);
                 }
@@ -195,6 +198,10 @@ public class TankFrame extends Frame {
                 if (bD) {
                     myTank.setDir(Dir.DOWN);
                 }
+                if (!myTank.isMoving()) {
+                    Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
+                }
+                myTank.setMoving(true);
             }
         }
     }

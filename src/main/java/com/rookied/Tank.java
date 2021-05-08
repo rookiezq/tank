@@ -22,7 +22,7 @@ public class Tank {
     private int x, y;
     private Dir dir;
     //是否静止
-    private boolean moving = true;
+    private boolean moving = false;
     private boolean living = true;
     //获得TankFrame的引用
     private TankFrame tf;
@@ -41,6 +41,7 @@ public class Tank {
         rect.width = WIDTH;
         rect.height = HEIGHT;
     }
+
     public Tank(TankJoinMsg msg) {
         this.x = msg.x;
         this.y = msg.y;
@@ -64,11 +65,19 @@ public class Tank {
         return x;
     }
 
+    public Tank setX(int x) {
+        this.x = x;
+        return this;
+    }
 
     public int getY() {
         return y;
     }
 
+    public Tank setY(int y) {
+        this.y = y;
+        return this;
+    }
 
     public Dir getDir() {
         return dir;

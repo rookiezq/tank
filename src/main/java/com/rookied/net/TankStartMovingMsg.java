@@ -1,7 +1,6 @@
 package com.rookied.net;
 
 import com.rookied.Dir;
-import com.rookied.Group;
 import com.rookied.Tank;
 import com.rookied.TankFrame;
 
@@ -10,45 +9,42 @@ import java.util.UUID;
 
 /**
  * @author zhangqiang
- * @date 2021/5/7
+ * @date 2021/5/8
  */
-public class TankJoinMsg extends Msg {
-    //所有属性加起来33字节
+public class TankStartMovingMsg extends Msg {
+    public UUID id;
     public int x, y;
     public Dir dir;
-    public boolean moving;
-    public Group group;
-    //128位 16字节
-    public UUID id;
 
-    public TankJoinMsg() {
+    public TankStartMovingMsg() {
     }
 
-    public TankJoinMsg(int x, int y, Dir dir, boolean moving, Group group, UUID id) {
+    public TankStartMovingMsg(int x, int y, Dir dir, UUID id) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.moving = moving;
-        this.group = group;
         this.id = id;
     }
 
-    public TankJoinMsg(Tank tank) {
+    public TankStartMovingMsg(Tank tank) {
+        this.id = tank.getId();
         this.x = tank.getX();
         this.y = tank.getY();
         this.dir = tank.getDir();
-        this.moving = tank.isMoving();
-        this.group = tank.getGroup();
-        this.id = tank.getId();
     }
 
     @Override
     public void handle() {
-        if (this.id.equals(TankFrame.INSTANCE.getMyTank().getId()) || TankFrame.INSTANCE.findByUUID(this.id) != null)
+        if (this.id.equals(TankFrame.INSTANCE.getMyTank().getId()))
             return;
-        TankFrame.INSTANCE.addTank(new Tank(this));
-        //让新坦克能看到老坦克
-        Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
+        Tank tank = TankFrame.INSTANCE.findByUUID(this.id);
+        if (tank != null) {
+            tank.setMoving(true);
+            tank.setDir(this.dir);
+            tank.setX(this.x);
+            tank.setY(this.y);
+        }
+        //TankFrame.INSTANCE.addTank(tank);
     }
 
     @Override
@@ -62,10 +58,7 @@ public class TankJoinMsg extends Msg {
 
             dos.writeInt(x);
             dos.writeInt(y);
-            //枚举本质是个数组,ordinal()为对象的下标
             dos.writeInt(dir.ordinal());
-            dos.writeBoolean(moving);
-            dos.writeInt(group.ordinal());
             dos.writeLong(id.getMostSignificantBits());
             dos.writeLong(id.getLeastSignificantBits());
 
@@ -96,16 +89,14 @@ public class TankJoinMsg extends Msg {
             bais = new ByteArrayInputStream(bytes);
             dis = new DataInputStream(bais);
 
-            this.x=dis.readInt();
-            this.y=dis.readInt();
-            this.dir=Dir.VALUES.get(dis.readInt());
-            this.moving=dis.readBoolean();
-            this.group=Group.values()[dis.readInt()];
-            this.id=new UUID(dis.readLong(),dis.readLong());
+            this.x = dis.readInt();
+            this.y = dis.readInt();
+            this.dir = Dir.VALUES.get(dis.readInt());
+            this.id = new UUID(dis.readLong(), dis.readLong());
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (dis != null) {
                     dis.close();
@@ -121,19 +112,17 @@ public class TankJoinMsg extends Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TankJoin;
+        return MsgType.TankStartMoving;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("TankJoinMsg");
+        StringBuilder sb = new StringBuilder("TankStartMovingMsg");
         sb.append("[");
-        sb.append("x=").append(x);
+        sb.append("id=").append(id);
+        sb.append("| x=").append(x);
         sb.append("| y=").append(y);
         sb.append("| dir=").append(dir);
-        sb.append("| moving=").append(moving);
-        sb.append("| group=").append(group);
-        sb.append("| id=").append(id);
         sb.append(']');
         return sb.toString();
     }
