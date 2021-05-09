@@ -26,8 +26,6 @@ public class Tank {
     //是否静止
     private boolean moving = false;
     private boolean living = true;
-    //获得TankFrame的引用
-    private TankFrame tf;
     //默认是坏子弹
     private Group group;
 
@@ -36,7 +34,6 @@ public class Tank {
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -51,6 +48,10 @@ public class Tank {
         this.moving = msg.moving;
         this.group = msg.group;
         this.id = msg.id;
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public UUID getId() {
@@ -104,7 +105,6 @@ public class Tank {
                 g.dispose();
                 return;
             }*/
-            tf.tanks.remove(this.id);
             return;
         }
         //uuid on head
@@ -182,12 +182,33 @@ public class Tank {
         //设置子弹的起始位置,从坦克的中心打出
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        Bullet bullet = new Bullet(this.id, bX, bY, dir, this.group, this.tf);
-        tf.addBullet(bullet);
+        Bullet bullet = new Bullet(this.id, bX, bY, dir, this.group);
+        TankFrame.INSTANCE.addBullet(bullet);
         Client.INSTANCE.send(new BulletNewMsg(bullet));
     }
 
     public void die() {
         this.living = false;
+        int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+        int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+        TankFrame.INSTANCE.explodes.add(new Explode(eX, eY));
+        TankFrame.INSTANCE.tanks.remove(this.id);
+        Client.INSTANCE.closeConnect();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Tank");
+        sb.append("[");
+        sb.append("rect=").append(rect);
+        sb.append("| id=").append(id);
+        sb.append("| x=").append(x);
+        sb.append("| y=").append(y);
+        sb.append("| dir=").append(dir);
+        sb.append("| moving=").append(moving);
+        sb.append("| living=").append(living);
+        sb.append("| group=").append(group);
+        sb.append(']');
+        return sb.toString();
     }
 }

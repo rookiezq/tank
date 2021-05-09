@@ -15,20 +15,17 @@ public class Explode {
     //坐标
     private int x, y;
 
-    //获得TankFrame的引用
-    private TankFrame tf;
 
-    public Explode(int x, int y, TankFrame tf) {
+    public Explode(int x, int y) {
         this.x = x;
         this.y = y;
-        this.tf = tf;
     }
 
     private int step = 0;
 
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], this.x, this.y, null);
-        if (step >= 16) tf.explodes.remove(this);
+        if (step >= 16) TankFrame.INSTANCE.explodes.remove(this);
     }
 
 }

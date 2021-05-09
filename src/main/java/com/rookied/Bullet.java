@@ -1,6 +1,8 @@
 package com.rookied;
 
 import com.rookied.net.BulletNewMsg;
+import com.rookied.net.Client;
+import com.rookied.net.TankDieMsg;
 
 import java.awt.*;
 import java.util.UUID;
@@ -22,8 +24,6 @@ public class Bullet {
     //是否存活
     private boolean living = true;
 
-    //获得TankFrame的引用
-    private TankFrame tf;
     //默认是坏子弹
     private Group group;
     private UUID id = UUID.randomUUID();
@@ -31,13 +31,12 @@ public class Bullet {
 
     Rectangle rect = new Rectangle();
 
-    public Bullet(UUID playerId, int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(UUID playerId, int x, int y, Dir dir, Group group) {
         this.playerID = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -165,15 +164,30 @@ public class Bullet {
      * 子弹和坦克的碰撞检测
      */
     public void collideWith(Tank tank) {
-        if (tank.getGroup() == this.group) {
+        if (tank.getId().equals(this.playerID)) {
+            //System.out.println(22222);
             return;
         }
-        if (rect.intersects(tank.rect)) {
+        if (this.rect.intersects(tank.rect)) {
             tank.die();
             this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            tf.explodes.add(new Explode(eX, eY, this.tf));
+            Client.INSTANCE.send(new TankDieMsg(this.id, tank.getId()));
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Bullet");
+        sb.append("[");
+        sb.append("x=").append(x);
+        sb.append("| y=").append(y);
+        sb.append("| dir=").append(dir);
+        sb.append("| living=").append(living);
+        sb.append("| group=").append(group);
+        sb.append("| id=").append(id);
+        sb.append("| playerID=").append(playerID);
+        sb.append("| rect=").append(rect);
+        sb.append(']');
+        return sb.toString();
     }
 }

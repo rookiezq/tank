@@ -1,9 +1,6 @@
 package com.rookied;
 
-import com.rookied.net.Client;
-import com.rookied.net.TankDirChangedMsg;
-import com.rookied.net.TankStartMovingMsg;
-import com.rookied.net.TankStopMsg;
+import com.rookied.net.*;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -26,7 +23,7 @@ public class TankFrame extends Frame {
     Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
 
     //所有坦克
-    Map<UUID, Tank> tanks = new HashMap<>();
+    public Map<UUID, Tank> tanks = new HashMap<>();
     //Bullet bullet = new Bullet(225, 250, Dir.DOWN);
     List<Bullet> bullets = new ArrayList<>();
     List<Explode> explodes = new ArrayList<>();
@@ -118,11 +115,10 @@ public class TankFrame extends Frame {
         }
 
         //碰撞检测 所有子弹和所有坦克互相检测
+        Collection<Tank> values = tanks.values();
         for (int i = 0; i < bullets.size(); i++) {
-            //敌方坦克可以伤害自己
-            //bullets.get(i).collideWith(myTank);
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWith(tanks.get(j));
+            for (Tank t : values) {
+                bullets.get(i).collideWith(t);
             }
         }
         /*for (Iterator<Bullet> it = bullets.listIterator();it.hasNext();){
