@@ -1,5 +1,5 @@
 # tank
-坦克大战
+坦克大战Netty版
 ## Config
 在resources.config中`port`配置Server启动端口,不要和现有端口冲突,默认`10001`
 ## Start
