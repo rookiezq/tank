@@ -1,5 +1,7 @@
 package com.rookied;
 
+import com.rookied.net.BulletNewMsg;
+import com.rookied.net.Client;
 import com.rookied.net.TankJoinMsg;
 
 import java.awt.*;
@@ -180,7 +182,9 @@ public class Tank {
         //设置子弹的起始位置,从坦克的中心打出
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        tf.bullets.add(new Bullet(bX, bY, dir, this.group, this.tf));
+        Bullet bullet = new Bullet(this.id, bX, bY, dir, this.group, this.tf);
+        tf.addBullet(bullet);
+        Client.INSTANCE.send(new BulletNewMsg(bullet));
     }
 
     public void die() {

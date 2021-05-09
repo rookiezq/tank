@@ -1,6 +1,9 @@
 package com.rookied;
 
+import com.rookied.net.BulletNewMsg;
+
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * @author zhangqiang
@@ -23,10 +26,13 @@ public class Bullet {
     private TankFrame tf;
     //默认是坏子弹
     private Group group;
+    private UUID id = UUID.randomUUID();
+    private UUID playerID;
 
     Rectangle rect = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(UUID playerId, int x, int y, Dir dir, Group group, TankFrame tf) {
+        this.playerID = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -39,6 +45,15 @@ public class Bullet {
         rect.height = HEIGHT;
     }
 
+    public Bullet(BulletNewMsg bulletNewMsg) {
+        this.playerID = bulletNewMsg.playerID;
+        this.id = bulletNewMsg.id;
+        this.x = bulletNewMsg.x;
+        this.y = bulletNewMsg.y;
+        this.dir = bulletNewMsg.dir;
+        this.group = bulletNewMsg.group;
+    }
+
     public Group getGroup() {
         return group;
     }
@@ -47,9 +62,54 @@ public class Bullet {
         this.group = group;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public Bullet setX(int x) {
+        this.x = x;
+        return this;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Bullet setY(int y) {
+        this.y = y;
+        return this;
+    }
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public Bullet setDir(Dir dir) {
+        this.dir = dir;
+        return this;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Bullet setId(UUID id) {
+        this.id = id;
+        return this;
+    }
+
+    public UUID getPlayerID() {
+        return playerID;
+    }
+
+    public Bullet setPlayerID(UUID playerID) {
+        this.playerID = playerID;
+        return this;
+    }
+
     public void paint(Graphics g) {
         if (!living) {
-            tf.bullets.remove(this);
+            TankFrame.INSTANCE.bullets.remove(this);
             return;
         }
         switch (dir) {

@@ -55,6 +55,19 @@ public class TankFrame extends Frame {
         return tanks.get(id);
     }
 
+    public Bullet findBulletsByID(UUID id) {
+        for (Bullet bullet : bullets) {
+            if (id.equals(bullet.getId())) {
+                return bullet;
+            }
+        }
+        return null;
+    }
+
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
+    }
+
     /**
      * 处理双缓冲,解决屏幕闪烁问题
      * 1. 运行在paint之前
@@ -176,6 +189,7 @@ public class TankFrame extends Frame {
                     break;
                 case KeyEvent.VK_CONTROL:
                     myTank.fire();
+
                     break;
                 default:
                     break;
@@ -208,7 +222,7 @@ public class TankFrame extends Frame {
                     Client.INSTANCE.send(new TankStartMovingMsg(myTank));
                 }
                 myTank.setMoving(true);
-                if(dir != myTank.getDir()){
+                if (dir != myTank.getDir()) {
                     Client.INSTANCE.send(new TankDirChangedMsg(myTank));
                 }
             }
