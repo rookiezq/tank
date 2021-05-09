@@ -1,5 +1,6 @@
 package com.rookied.net;
 
+import com.rookied.PropertyMgr;
 import com.rookied.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -13,7 +14,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class Client {
     public static final Client INSTANCE = new Client();
-    int port = 10001;
+    int port = Integer.parseInt(PropertyMgr.get("port"));
     private Channel channel;
 
     private Client() {

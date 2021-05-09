@@ -1,5 +1,6 @@
 package com.rookied.net;
 
+import com.rookied.PropertyMgr;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
@@ -15,7 +16,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  */
 public class Server {
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    int port = 10001;
+    int port = Integer.parseInt(PropertyMgr.get("port"));
 
     public void start() {
         EventLoopGroup boosGroup = new NioEventLoopGroup(1);
